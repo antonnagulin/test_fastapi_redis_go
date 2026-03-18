@@ -31,8 +31,8 @@ services:
 
   worker:
     build: .
-    container_name: fastapi_worker
-    command: python result_worker.py
+    # container_name: fastapi_worker
+    command: python -u result_worker.py    
     volumes:
       - .:/app
     depends_on:

@@ -1,25 +1,21 @@
 # Makefile для проекта FastAPI + Worker + Redis + Postgres
 
 # Переменные
-```
+
 DOCKER_COMPOSE = docker compose
 SERVICE_FASTAPI = fastapi
-SERVICE_WORKER = fastapi_worker
+SERVICE_WORKER = worker
 SERVICE_REDIS = redis-1
 SERVICE_POSTGRES = postgres
-```
-.PHONY: all build up down logs clean restart shell
+
+.PHONY: all up down logs clean restart shell
 
 # По умолчанию — сборка и запуск
 all: build up
 
-# Собрать образы
-build:
-	$(DOCKER_COMPOSE) build
-
-# Запустить все сервисы в фоне
+# Собрать образы и понять их
 up:
-	$(DOCKER_COMPOSE) up -d
+	$(DOCKER_COMPOSE) up --build
 
 # Остановить все сервисы
 down:
