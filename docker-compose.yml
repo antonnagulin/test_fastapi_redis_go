@@ -1,0 +1,50 @@
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+
+
+  fastapi:
+    build: .
+    container_name: fastapi
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+
+  worker:
+    build: .
+    container_name: fastapi_worker
+    command: python result_worker.py
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - redis
+
+  # go_worker:
+  #   build:
+  #     context: ./go_worker
+  #   container_name: go_worker
+  #   depends_on:
+  #     - redis
+
+volumes:
+  postgres_data:
